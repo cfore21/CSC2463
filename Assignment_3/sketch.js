@@ -38,6 +38,7 @@ class CharObj{
 
   this.sprite = new Sprite(this.x,this.y,this.s,this.s);
   this.sprite.spriteSheet = sheet;
+  this.sprite.collider = 'none';
 
   let animations =
   {
