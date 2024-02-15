@@ -15,7 +15,7 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(1000, 600);
 }
 
 function draw() {
@@ -32,8 +32,8 @@ for(i = 0; i < group.length; i++){
 
 class CharObj{
   constructor(sheet){
-  this.x = random(80,320);
-  this.y = random(80,320);
+  this.x = random(80,920);
+  this.y = random(80,520);
   this.s = 80;
 
   this.sprite = new Sprite(this.x,this.y,this.s,this.s);
