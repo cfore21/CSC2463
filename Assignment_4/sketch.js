@@ -1,0 +1,185 @@
+let group = [];
+let bugSprite;
+let deadBugs = 0;
+let timer = 30; 
+let speed = 2; 
+let gameOver = false;
+
+function preload(){
+  for(let i = 0; i < 30; i++) {
+    let bugSprite = new CharObj();
+    group.push(bugSprite);
+  }
+
+}
+
+function setup() {
+  createCanvas(1000, 600);
+}
+
+function draw() {
+  background(220);
+
+if(gameOver){
+  gameEnd();
+}
+else{
+  playing();
+
+  for(i = 0; i < group.length; i++){
+    if(!group[i].dead){
+      if (group[i].direction==="right" && group[i].dead == false){group[i].walkRight();}
+      else if (group[i].direction==="left" && group[i].dead == false){group[i].walkLeft();}
+      else if (group[i].direction==="up" && group[i].dead == false){group[i].walkUp();}
+      else if (group[i].direction==="down" && group[i].dead == false){group[i].walkDown();}
+      else {group[i].stopped();}
+
+      group[i].updatePos();
+    }
+  }
+}
+
+}
+
+function mousePressed(){
+  for(i = 0; i < group.length; i++){
+    if(group[i].contains(mouseX,mouseY) && group[i].dead == false){
+      deadBugs++;
+      speed = speed + 0.5;
+      
+      group[i].dead = true; 
+      group[i].stopped();
+      
+    }
+}
+}
+
+function playing(){
+  textSize(16);
+  textAlign(CENTER);
+  text("Kills: " + deadBugs, 35, 20)
+  text("Time: " + ceil(timer), width-35, 20);
+  timer -= deltaTime /1000;
+
+  if (timer < 0){
+    gameOver = true;
+  }
+}
+
+function gameEnd(){
+  console.log("Game ended");
+  textSize(25);
+  textAlign(CENTER);
+  fill('red');
+  text("Game over, man, game over!", width/2, height/2);
+  text("Bugs exterminated: " + deadBugs, width/2, height/2+50);
+
+
+  for (let i = 0; i < group.length; i++) {
+    group[i].dead = true;
+    group[i].sprite.remove();
+  }
+
+}
+
+class CharObj{
+  constructor(){
+  this.dead = false;
+  this.x = random(80,920);
+  this.y = random(80,520);
+  this.s = 80;
+  this.direction = random(["up", "down", "left", "right"]);
+
+  this.sprite = new Sprite(this.x,this.y,this.s,this.s);
+  this.sprite.spriteSheet = 'assets/bug.png';
+  this.sprite.collider = 'none';
+  
+
+  let animations =
+  {
+    dead: {row : 2, frames: 1},
+    walkRight: {row: 1, frames: 3},
+    walkUp: {row: 0, frames: 3}
+  };
+
+  this.sprite.anis.frameDelay = 7;
+  this.sprite.addAnis(animations);
+  this.sprite.changeAni('dead');
+  }
+
+  walkRight(){
+    this.sprite.changeAni('walkRight');
+    this.sprite.vel.x = 1;
+    this.sprite.vel.y = 0;
+    this.sprite.scale.x = -1;
+  }
+  
+  walkLeft(){
+    this.sprite.changeAni('walkRight');
+    this.sprite.vel.x = -1;
+    this.sprite.vel.y = 0;
+    this.sprite.scale.x = 1;
+  }
+
+  walkUp(){
+    this.sprite.changeAni('walkUp');
+    this.sprite.vel.y = -1;
+    this.sprite.vel.x = 0; 
+    this.sprite.scale.y = 1;
+  }
+  
+  walkDown(){
+    this.sprite.changeAni('walkUp');
+    this.sprite.vel.y = 1;
+    this.sprite.vel.x = 0;
+    this.sprite.scale.y = -1;   
+  }
+
+  stopped(){
+    this.sprite.vel.x = 0;
+    this.sprite.vel.y = 0;
+    this.sprite.scale.x = 1;
+    this.sprite.scale.y = 1; 
+    this.sprite.changeAni('dead');
+  }
+
+  updatePos(){
+    this.x += this.sprite.vel.x * speed;
+    this.y += this.sprite.vel.y * speed;
+
+    this.sprite.x = this.x;
+    this.sprite.y = this.y;
+    
+    if(this.x <= 10 || this.x >= width-10){
+      this.sprite.vel.x *= -1;
+      if(this.direction === "right"){
+        this.direction = "left";
+      }
+      else if(this.direction === "left"){
+        this.direction = "right";
+      }
+    }
+      
+
+    if(this.y <= 10 || this.y >= height-10){
+       this.sprite.vel.y *= -1;
+
+      if(this.direction ==="up"){
+        this.direction = "down";
+      }
+      else if(this.direction === "down"){
+        this.direction = "up";
+      }
+    }
+
+    this.sprite.x = this.x;
+    this.sprite.y = this.y;
+}
+
+  contains(x,y){
+    let insideX = x >= this.x-20 && x <= this.x +20;
+    let insideY = y >= this.y-20 && y <= this.y +20;
+    return insideX && insideY;
+}
+
+}
