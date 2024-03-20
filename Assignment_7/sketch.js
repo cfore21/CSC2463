@@ -1,5 +1,7 @@
  
 let filter = new Tone.Filter(1, "highpass");
+let vibrato = new Tone.Vibrato(7,0.5);
+
 
 let syn = new Tone.Synth({
   volume: 50,
@@ -15,8 +17,9 @@ let syn = new Tone.Synth({
 
   }
 
-}).connect(filter);
+}).connect(vibrato);
 
+vibrato.connect(filter);
 filter.toDestination();
 
 function preload(){
@@ -40,7 +43,7 @@ else if(mouseIsPressed === false){
 }
 
 function mousePressed(){
-    syn.triggerAttackRelease("C4", "16n");
+    syn.triggerAttackRelease("C5", "16n");
     filter.frequency.rampTo(7000, 0.1);
 
 }
