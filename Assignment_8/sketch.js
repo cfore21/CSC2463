@@ -33,6 +33,7 @@ let square = new Tone.Synth({
 
 let seq1 = new Tone.Sequence (function (time, note){
   square.triggerAttackRelease(note, 0.5);
+  square.volume.value = -5;
 }, mel, '4n');
 
 let sfx = new Tone.Players({
@@ -40,9 +41,6 @@ let sfx = new Tone.Players({
   2 : "assets/9509__petenice__whoosh.wav", //miss
   3 : "assets/397353__plasterbrain__tada-fanfare-g.flac", //finish
   4 : "assets/513456__pomeroyjoshua__anu-crash-03.wav" //begin
-}, {
-  autostart: true 
-  
 
 }).toDestination();
 
