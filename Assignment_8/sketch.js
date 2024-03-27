@@ -39,6 +39,7 @@ let sfx = new Tone.Players({
   1 : "assets/515618__mrickey13__splatsquish-1.wav", //hit
   2 : "assets/9509__petenice__whoosh.wav", //miss
   3 : "assets/397353__plasterbrain__tada-fanfare-g.flac", //finish
+  4 : "assets/513456__pomeroyjoshua__anu-crash-03.wav" //begin
 }, {
   autostart: true 
   
@@ -101,6 +102,7 @@ function mousePressed(){
   }
 
   if (!gameStart) {
+    sfx.player('4').start();
     gameStart = true;
    
   }
